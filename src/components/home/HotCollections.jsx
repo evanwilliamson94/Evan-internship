@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import authorImage from "../../images/author_thumbnail.jpg";
 import nftImage from "../../images/nftImage.jpg";
 import axios from 'axios';
-import { collection } from "firebase/firestore";
 import OwlCarousel from 'react-owl-carousel';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.default.css';
@@ -18,7 +17,7 @@ const HotCollections = () => {
   async function fetchHotCollections() {
       try {
           console.log("Fetching data...");
-          const { data } = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections/userId=${id}`);
+          const { data } = await axios.get(`https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections`);
           console.log("Data fetched:", data);
           setHotCollections(data);
           setLoading(false);
@@ -33,7 +32,6 @@ const HotCollections = () => {
  
   const timeout = setTimeout(() => {
       if (loading) {
-          console.log("Loading taking too long, forcing stop");
           setLoading(false);
       }
   }, 5000);
@@ -72,7 +70,7 @@ return (
                           <div className="item" key={index}>
                               <div className="nft_coll">
                                   <div className="nft_wrap">
-                                      <Link to="#">
+                                      <Link to="/item-details">
                                           <Skeleton width="100%" height="200px" />
                                       </Link>
                                   </div>
@@ -100,12 +98,12 @@ return (
                               <div className="nft_coll">
                                   <div className="nft_wrap">
                                       <Link to="/item-details">
-                                          <img src={collection.nftImage} className="lazy img-fluid" alt="" />
+                                          <img src={collection.nftImage || nftImage} className="lazy img-fluid" alt="" />
                                       </Link>
                                   </div>
                                   <div className="nft_coll_pp">
                                       <Link to="/author">
-                                          <img className="lazy pp-coll" src={collection.authorImage} alt="" />
+                                          <img className="lazy pp-coll" src={collection.authorImage || authorImage} alt="" />
                                       </Link>
                                       <i className="fa fa-check"></i>
                                   </div>
